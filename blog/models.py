@@ -34,6 +34,8 @@ class Post(models.Model):
     tag = models.ManyToManyField(Tag, blank=True)
     # 作者 django.contrib.auto是django的内置应用，采用一对多的关系
     author = models.ForeignKey(User)
+    # 阅读量
+    views = models.PositiveIntegerField(default=0)
 
     def get_absolute_url(self):
         # blog:detail 是因为在urls中配置的name='detail'派上了用场，意思是blog下的detail函数
@@ -42,5 +44,10 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+    def increase_views(self):
+        self.views += 1
+        self.save(update_fields=['views'])
+
     class Meta:
         ordering = ['-create_time']
+
